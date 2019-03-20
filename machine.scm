@@ -1,3 +1,4 @@
+;constructs the machine with sigma Q q0 F delta
 (define make-machine
   (lambda (sigma- Q- q0- F- delta-)
     (define sigma sigma-)
@@ -17,6 +18,7 @@
 	    (display "Invalid operation on machine ")
 	    (display method)(newline)))))))
 
+;consume 1 character at a time and then try every possible state transition from the current-state given that character
 (define machine-accepts?
   (lambda (machine str)
     (define machine-accepts?-helper
@@ -50,6 +52,7 @@
 
     (machine-accepts?-helper machine (machine 'get-q0) (string->list str))))
 
+;returns #t if tar is in lst #f otherwise
 (define member?
   (lambda (tar lst)
     (cond
@@ -57,10 +60,12 @@
       [(eq? (car lst) tar) #t]
       (else (member? tar (cdr lst))))))
 
+;converts a single character symbol into a string for comparison
 (define symbol->char
   (lambda (symbol)
     (car (string->list (symbol->string symbol)))))
 
+;contains all elements of lst for which (p elements) is true
 (define filter
   (lambda (p lst)
     (cond
@@ -69,6 +74,7 @@
       (else
 	(filter p (cdr lst))))))
 
+;constructs a machine that is the union of m1 and m2
 (define machine-union
   (lambda (m1 m2)
     (define m1q0 (string->symbol (string-append "m1" (symbol->string (m1 'get-q0)))))
@@ -83,11 +89,13 @@
 				      (map (prepend-state "m2") (m2 'get-delta)))))
     (make-machine sigma Q q0 F delta)))
 
+;prepends a string onto the state in delta, used to avoid name collisions in machine-union
 (define prepend-state 
   (lambda (str)
     (lambda (state)
       (cons (string->symbol (string-append str (symbol->string (car state)))) (map (lambda (x) (list (car x) (string->symbol (string-append str (symbol->string (cadr x)))))) (cdr state))))))
 
+;returns the set containing all elements in s1 or s2
 (define set-union
   (lambda (s1 s2)
     (cond
