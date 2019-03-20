@@ -60,7 +60,7 @@ L(M) = {a^2n : n>= 0, a^3}
 (define q5 '(q5))
 (define Q '(q0 q1 q2 q3 q4 q5))
 (define F '(q2 q5))
-(define delta (list (q0 q1 q2 q3 q4 q5)))
+(define delta (list q0 q1 q2 q3 q4 q5))
 (define machine (make-machine sigma Q q0 F delta))
 
 >(machine-accepts? machine "")
