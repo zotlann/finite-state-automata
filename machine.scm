@@ -63,7 +63,9 @@
 ;converts a single character symbol into a string for comparison
 (define symbol->char
   (lambda (symbol)
-    (car (string->list (symbol->string symbol)))))
+    (cond
+      [(number? symbol) (car (string->list (number->string symbol)))]
+      (else (car (string->list (symbol->string symbol)))))))
 
 ;contains all elements of lst for which (p elements) is true
 (define filter
